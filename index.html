@@ -42,7 +42,7 @@
                     <button type="button" class="btn btn-success btn-primary btn-lg" id="submit">Submit</button>
                     <button type="button" class="btn btn-default btn-lg" id="login">Login</button>
                 </div>
-                
+
             </div>
             </div>
         <!-- NOTE: /Input -->
@@ -68,7 +68,7 @@
         </div>
         <!-- NOTE: /Open gate -->
         <!-- NOTE: Reserved page -->
-        <div class="container fontFamily" id="booking-success" >   
+        <div class="container fontFamily" id="booking-success" >
             <div class="row">
                 <div class="col-md-12 successText"><h3>Booking Successful</h3></div>
             </div>
@@ -79,7 +79,7 @@
                           <div class="panel-heading">
                                 <h2>BOOKED</h2>
                           </div>
-                    </div>    
+                    </div>
                 </div>
                 <div class="col-md-6"></div>
                 <div class="col-md-4">
@@ -107,7 +107,7 @@
                 <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-lg" id="logout-booking-btn">Logout</button>
                 </div>
-            </div>    
+            </div>
         </div>
         <!-- NOTE: /Reserved page -->
         <!-- NOTE: Last page -->
@@ -232,13 +232,13 @@
                 password = $("#password").val();
                 console.log('user = '+address+'\n pass = '+password);
                 console.log('Ruser = '+real_address+'\n Rpass = '+real_password);
-                if ( parked && reserved && ((address===real_address)&&(password===real_password)) ) {
+                if ( parked && reserved && ((address===real_address)&&(password===real_password)) && (address.length > 0 && password.length > 0)) {
                     changeLoginStatus();
                     $(".front-page").fadeOut();
                     setTimeout(function () {$("#exit-park").fadeIn();},500 );
                     $("#alert-box").hide();
                 }
-                else if( reserved && ((address===real_address)&&(password===real_password))){
+                else if( reserved && ((address===real_address)&&(password===real_password ))&& (address.length > 0 && password.length > 0)  ){
                     $("#open-btn").fadeIn();
                     $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
                     changeLoginStatus();
@@ -257,14 +257,19 @@
                 return address+"_"+status_num;
             }
             function goToReservePage() {
-                address = $("#address").val();
-                password = $("#password").val();
-                $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
-                $.post("http://exceed.cupco.de/iot/SeatBelt/password",{data:password});
-                reserved = true;
-                $(".front-page").fadeOut();
-                $("#booking-success").fadeIn(2000);
-                $("#alert-box").hide();
+                if (address.length <= 0 || password.length <= 0) {
+                    $("#alert-box").fadeIn();
+                }
+                else{
+                    address = $("#address").val();
+                    password = $("#password").val();
+                    $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
+                    $.post("http://exceed.cupco.de/iot/SeatBelt/password",{data:password});
+                    reserved = true;
+                    $(".front-page").fadeOut();
+                    $("#booking-success").fadeIn(2000);
+                    $("#alert-box").hide();
+                }
             }
             $("#submit").click(goToReservePage);
             $("#login").click(goToOpenPage);

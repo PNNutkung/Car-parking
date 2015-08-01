@@ -32,7 +32,18 @@
         </div>
         <script src="jquery-2.1.4.min.js"></script>
         <script>
-            
+            var parking = false;
+            var login = true;
+            function exit(){
+                parking = false;
+                $("#exit-park").fadeOut();
+            }
+            function toMainMenu(){
+                login = false;
+                $("#exit-park").fadeOut();
+            }
+            $("#exit-butt").click(exit)
+            $("#logout").click(toMainMenu);
         </script>
     </body>
 </html>

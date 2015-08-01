@@ -16,6 +16,9 @@
             <!-- NOTE: /Header -->
             <!-- NOTE: Input -->
             <div class="front-page">
+                <div class="alert alert-danger" role="alert" id="alert-box">
+                    <b>Oh snap!</b> Wrong Vehicle registration or password
+                </div>
                 <div class="row">
                   <div class="col-md-3">
                       <h4>Vehicle Registration :</h4>
@@ -105,6 +108,14 @@
             </div>
         </div>
         <!-- NOTE: /Reserved page -->
+        <!-- NOTE: Last page -->
+        <div class="container" id="thank">
+          <div class="col-md-12">
+              <h1>Thank you for using our service.</h1>
+              <h2>Have a nice drive!</h2>
+          </div>
+        </div>
+        <!-- NOTE: /Last page -->
         </div>
 
         <script src="jquery-2.1.4.min.js"></script>
@@ -112,7 +123,9 @@
             $("#booking-success").hide();
             $("#exit-park").hide();
             $(".open").hide();
+            $("#thank").hide();
             $("#logout-btn").hide();
+            $("#alert-box").hide();
             var login = true;
             var parked = false;
             var today = new Date();
@@ -122,7 +135,7 @@
             var hh = today.getHours();
             var mn = today.getMinutes();
             var ss = today.getSeconds();
-            var parking = false;
+            var reserved = false;
             var login = false;
             var interval = setInterval(refresh, 5000);
             var address = $("#address").val();
@@ -152,10 +165,9 @@
             }
             function toMainMenu(){
                 $("#booking-success").fadeOut();
-                $(".front-page").fadeIn(2000);
+                setTimeout(function (){$(".front-page").fadeIn();},1000);
                 $("#exit-park").fadeOut();
                 login = false;
-                return ;
             }
             $("#logout").click(toMainMenu);
             function refresh() {
@@ -171,39 +183,51 @@
                 $("#logout-btn").fadeIn();
             }
             function openGate(){
-                $("#open-btn").fadeOut();
+                setTimeout(function(){$("#open-btn").fadeOut(); },500);
                 $("#status").html("<h2>Opened</h2>");
             }
             function goToTopPage() {
                 $(".open").fadeOut();
-                $(".front-page").fadeIn(2000);
+                setTimeout(function() {$(".front-page").fadeIn()},500);
                 login = false;
-                return ;
             }
             function exit(){
-                parking = false;
+                reserved = false;
                 $("#exit-park").fadeOut();
+                $("#thank").fadeIn(2000);
+                clearAndGoToFront();
+            }
+            function clearAndGoToFront() {
+                $("#thank").fadeOut();
+                $(".front-page").fadeIn(5000);
             }
             function goToOpenPage() {
-                if ( parked ) {
+                if ( parked && reserved ) {
                     changeLoginStatus();
                     $(".front-page").fadeOut();
-                    $("#exit-park").fadeIn(2000);
+                    setTimeout(function () {$("#exit-park").fadeIn();},500 );
+                    $("#alert-box").hide();
                 }
-                else {
+                else if( reserved ){
                     parked = true;
                     changeLoginStatus();
                     $(".front-page").fadeOut();
-                    $(".open").fadeIn(2000);
+                    setTimeout(function (){$(".open").fadeIn(2000);},500);
+                    $("#alert-box").hide();
+                }
+                else {
+                    $("#alert-box").fadeIn();
                 }
             }
             function goToReservePage() {
+                reserved = true;
                 $(".front-page").fadeOut();
                 $("#booking-success").fadeIn(2000);
+                $("#alert-box").hide();
             }
             $("#submit").click(goToReservePage);
             $("#login").click(goToOpenPage);
-            $("#ex#it-btn").click(exit);
+            $("#exit-btn").click(exit);
             $("#logout-exit-park-btn").click(toMainMenu);
             $("#logout-booking-btn").click(toMainMenu);
             $("#logout-open-btn").click(goToTopPage);

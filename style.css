@@ -1,0 +1,63 @@
+body {
+    background-color: floralwhite;
+}
+
+.header h1 {
+    font-size: 80px;
+    text-align: center;
+    color: cornflowerblue;
+    padding: 30px;
+}
+
+.loginText h4 {
+    font-size: 40px;
+    text-align: center;
+    color: cadetblue;
+}
+
+.textID {
+    padding-bottom: 55px;
+}
+
+.btnRegis {
+    font-size: 160px;   
+}
+
+.form-control {
+    font-size: 20px;
+}
+
+.form1 {
+    padding-top: 30px;
+}
+
+.form2 {
+    padding-top: 15px;
+}
+
+.fontFamily {
+    font-family: monospace;
+}
+
+.successText h3 {
+    font-size: 40px;
+    text-align: center;
+    font-weight: bold;
+    color: green;
+    padding-bottom: 60px;
+    animation: blinker 0.8s cubic-bezier(.5, 0, 1, 1) infinite alternate;  
+}
+@keyframes blinker {  
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.panel-heading h2 {
+    font-size: 40px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.panel-body h4 {
+    font-size: 30px;
+}

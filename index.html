@@ -1,49 +1,50 @@
 <!DOCTYPE html>
-   <html>
+    <html>
     <head>
         <meta charset="utf-8">
-        <title>Parking Controller</title>
+        <title>SeatBelt Parking Centre</title>
         <link rel="stylesheet" href="bootstrap-3.3.5-dist/css/bootstrap.css">
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/png" href="images/car.png">
     </head>
     <body>
-        <div class="container">
+        <div class="container fontFamily">
             <!-- NOTE: Header -->
             <div class="row">
-                <div class="col-md-12">
-                  <h1>Parking Controller</h1>
+                <div class="col-md-12 header">
+                  <h1>SeatBelt Parking Centre</h1>
                 </div>
             </div>
             <!-- NOTE: /Header -->
             <!-- NOTE: Input -->
             <div class="front-page">
-                <div class="alert alert-danger" role="alert" id="alert-box">
+               <div class="alert alert-danger" role="alert" id="alert-box">
                     <b>Oh snap!</b> Wrong Vehicle registration or password
                 </div>
                 <div class="row">
-                  <div class="col-md-3">
-                      <h4>Vehicle Registration :</h4>
-                  </div>
-                   <div class="col-md-8">
-                       <input type="text" id="address" class="form-control" placeholder="Enter Your Vehicle Registration">
+                    <div class="col-md-3 loginText textID">
+                      <h4>Vehicle Registration</h4>
                     </div>
+                <div class="col-md-8 form1">
+                   <input type="text" id="address" class="form-control" placeholder="Enter Your Vehicle Registration">
                 </div>
-                <div class="row">
-                   <div class="col-md-3">
-                       <h4>Password :</h4>
-                   </div>
-                    <div class="col-md-8">
-                        <input type="text" id="password" class="form-control" placeholder="Enter Your Password">
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-success btn-primary btn-lg" id="submit">Submit</button>
-                    </div>
-                    <div class="col-md-1">
-                        <button type="button" class="btn btn-default btn-lg" id="login">Login</button>
-                    </div>
+            <div class="row loginText">
+                <div class="col-md-3">
+                   <h4>Password</h4>
                 </div>
-        </div>
+                <div class="col-md-8 form2">
+                    <input type="password" id="password" class="form-control" placeholder="Enter Your Password">
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-12 btnRegis">
+                    <button type="button" class="btn btn-success btn-primary btn-lg" id="submit">Submit</button>
+                    <button type="button" class="btn btn-default btn-lg" id="login">Login</button>
+                </div>
+                
+            </div>
+            </div>
         <!-- NOTE: /Input -->
         <!-- NOTE: Go out of carpark -->
         <div class="container" id="exit-park">
@@ -67,22 +68,23 @@
         </div>
         <!-- NOTE: /Open gate -->
         <!-- NOTE: Reserved page -->
-        <div class="container" id="booking-success">
+        <div class="container fontFamily" id="booking-success" >   
             <div class="row">
-                <div class="col-md-12"><h3>Booking Successful</h3></div>
+                <div class="col-md-12 successText"><h3>Booking Successful</h3></div>
             </div>
+            <div class="row"><div class="col-md-12"><h1></h1></div></div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <div class="panel panel-success">
                           <div class="panel-heading">
                                 <h2>BOOKED</h2>
                           </div>
-                    </div>
+                    </div>    
                 </div>
-                <div class="col-md-1"></div>
-                <div class="col-md-3">
+                <div class="col-md-6"></div>
+                <div class="col-md-4">
                     <div class="row">
-                       <div class="col-md-6">
+                       <div class="col-md-8">
                            <div class="panel panel-default">
                           <div class="panel-body">
                                 <h4 id="time">Time</h4>
@@ -91,7 +93,7 @@
                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                            <div class="panel panel-default">
                           <div class="panel-body">
                                 <h4 id="date">Date</h4>
@@ -105,7 +107,7 @@
                 <div class="col-md-2">
                     <button type="button" class="btn btn-danger btn-lg" id="logout-booking-btn">Logout</button>
                 </div>
-            </div>
+            </div>    
         </div>
         <!-- NOTE: /Reserved page -->
         <!-- NOTE: Last page -->
@@ -166,6 +168,13 @@
                 return ;
             }
             function toMainMenu(){
+                parked = false;
+                $("#booking-success").fadeOut();
+                setTimeout(function (){$(".front-page").fadeIn();},1000);
+                $("#exit-park").fadeOut();
+                login = false;
+            }
+            function toMainMenuExit(){
                 $("#booking-success").fadeOut();
                 setTimeout(function (){$(".front-page").fadeIn();},1000);
                 $("#exit-park").fadeOut();
@@ -173,7 +182,7 @@
             }
             $("#logout").click(toMainMenu);
             function refresh() {
-                $.get("http://exceed.cupco.de/iot/SeatBelt/address",onLoaded)
+                $.get("http://exceed.cupco.de/iot/SeatBelt/web",onLoaded)
                 $.get("http://exceed.cupco.de/iot/SeatBelt/password",onLoadedPassword)
                 if (complete) {
                     $("#status").html("<h2>Parked</h2>");
@@ -195,6 +204,8 @@
                 $("#logout-btn").fadeIn();
             }
             function openGate(){
+                parked = true;
+                $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
                 setTimeout(function(){$("#open-btn").fadeOut(); },500);
                 $("#status").html("<h2>Opened</h2>");
             }
@@ -204,9 +215,10 @@
                 login = false;
             }
             function exit(){
-                $.post("http://exceed.cupco.de/iot/SeatBelt/address",{data:"default_0"});
+                $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:"default_0"});
                 $.post("http://exceed.cupco.de/iot/SeatBelt/password",{data:"default"});
                 reserved = false;
+                parked = false;
                 $("#exit-park").fadeOut();
                 $("#thank").fadeIn(2000);
                 clearAndGoToFront();
@@ -215,20 +227,20 @@
                 $("#thank").fadeOut();
                 $(".front-page").fadeIn(5000);
             }
-            function checkIdPassword(){
-                if (address==real_address&&password==real_password) return true
-                return false
-            }
             function goToOpenPage() {
-                if ( parked && reserved &&checkIdPassword()) {
+                address = $("#address").val();
+                password = $("#password").val();
+                console.log('user = '+address+'\n pass = '+password);
+                console.log('Ruser = '+real_address+'\n Rpass = '+real_password);
+                if ( parked && reserved && ((address===real_address)&&(password===real_password)) ) {
                     changeLoginStatus();
                     $(".front-page").fadeOut();
                     setTimeout(function () {$("#exit-park").fadeIn();},500 );
                     $("#alert-box").hide();
                 }
-                else if( reserved && checkIdPassword){
-                    parked = true;
-                    $.post("http://exceed.cupco.de/iot/SeatBelt/address",{data:getGalileoAddress()});
+                else if( reserved && ((address===real_address)&&(password===real_password))){
+                    $("#open-btn").fadeIn();
+                    $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
                     changeLoginStatus();
                     $(".front-page").fadeOut();
                     setTimeout(function (){$(".open").fadeIn(2000);},500);
@@ -247,7 +259,7 @@
             function goToReservePage() {
                 address = $("#address").val();
                 password = $("#password").val();
-                $.post("http://exceed.cupco.de/iot/SeatBelt/address",{data:getGalileoAddress()});
+                $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
                 $.post("http://exceed.cupco.de/iot/SeatBelt/password",{data:password});
                 reserved = true;
                 $(".front-page").fadeOut();
@@ -257,7 +269,7 @@
             $("#submit").click(goToReservePage);
             $("#login").click(goToOpenPage);
             $("#exit-btn").click(exit);
-            $("#logout-exit-park-btn").click(toMainMenu);
+            $("#logout-exit-park-btn").click(toMainMenuExit);
             $("#logout-booking-btn").click(toMainMenu);
             $("#logout-open-btn").click(goToTopPage);
             $("#open-btn").click(openGate);

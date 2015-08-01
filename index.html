@@ -46,8 +46,8 @@
         <div class="container" id="exit-park">
             <div class="row">
                 <div class="col-md-12">
-                    <button type="button" class="btn btn-warning btn-lg" id="exit-butt">Exit</button>
-                    <button type="button" class="btn btn-danger btn-lg" id="logout">Logout</button>
+                    <button type="button" class="btn btn-warning btn-lg" id="exit-btn">Exit</button>
+                    <button type="button" class="btn btn-danger btn-lg" id="logout-exit-park-btn">Logout</button>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row text-center">
                 <button type="button" class="btn btn-success" id="open-btn">Open</button>
-                <button type="button" class="btn btn-dangerous" id="logout-btn">Logout</button>
+                <button type="button" class="btn btn-dangerous" id="logout-open-btn">Logout</button>
             </div>
         </div>
         <!-- NOTE: /Open gate -->
@@ -100,7 +100,7 @@
             </div>
             <div class="row">
                 <div class="col-md-2">
-                    <button type="button" class="btn btn-danger btn-lg" id="logout">Logout</button>
+                    <button type="button" class="btn btn-danger btn-lg" id="logout-booking-btn">Logout</button>
                 </div>
             </div>
         </div>
@@ -152,7 +152,10 @@
             }
             function toMainMenu(){
                 $("#booking-success").fadeOut();
+                $(".front-page").fadeIn(2000);
+                $("#exit-park").fadeOut();
                 login = false;
+                return ;
             }
             $("#logout").click(toMainMenu);
             function refresh() {
@@ -182,14 +185,28 @@
                 $("#exit-park").fadeOut();
             }
             function goToOpenPage() {
-                changeLoginStatus();
-                $(".front-page").fadeOut();
-                $(".open").fadeIn(2000);
+                if ( parked ) {
+                    changeLoginStatus();
+                    $(".front-page").fadeOut();
+                    $("#exit-park").fadeIn(2000);
+                }
+                else {
+                    parked = true;
+                    changeLoginStatus();
+                    $(".front-page").fadeOut();
+                    $(".open").fadeIn(2000);
+                }
             }
+            function goToReservePage() {
+                $(".front-page").fadeOut();
+                $("#booking-success").fadeIn(2000);
+            }
+            $("#submit").click(goToReservePage);
             $("#login").click(goToOpenPage);
-            $("#exit-butt").click(exit);
-            $("#logout").click(toMainMenu);
-            $("#logout-btn").click(goToTopPage);
+            $("#ex#it-btn").click(exit);
+            $("#logout-exit-park-btn").click(toMainMenu);
+            $("#logout-booking-btn").click(toMainMenu);
+            $("#logout-open-btn").click(goToTopPage);
             $("#open-btn").click(openGate);
         </script>
     </body>

@@ -7,12 +7,14 @@
     </head>
     <body>
         <div class="container">
+            <!-- NOTE: Header -->
             <div class="row">
                 <div class="col-md-12">
                   <h1>Parking Controller</h1>
                 </div>
-            </div>    
-            <div class="row"></div>
+            </div>
+            <!-- NOTE: /Header -->
+            <!-- NOTE: Input -->
             <div class="row">
               <div class="col-md-3">
                   <h4>Vehicle Registration :</h4>
@@ -41,9 +43,71 @@
                 </div>
             </div>
         </div>
+        <!-- NOTE: /Input -->
+        <!-- NOTE: Go out of carpark -->
+        <div class="container" id="exit-park">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-warning btn-lg" id="exit-butt">Exit</button>
+                    <button type="button" class="btn btn-danger btn-lg" id="logout">Logout</button>
+                </div>
+            </div>
+        </div>
+        <!-- NOTE: /Go out of carpark -->
+        <!-- NOTE: Open gate -->
+        <div class="open">
+            <div class="row text-center col-lg-12 col-md-12 col-sm-12 col-xs-12" id="status">
+                <h2>Car ID</h2>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row text-center">
+                <button type="button" class="btn btn-success" id="open-btn">Open</button>
+                <button type="button" class="btn btn-dangerous" id="logout-btn">Logout</button>
+            </div>
+        </div>
+        <!-- NOTE: /Open gate -->
+
         <script src="jquery-2.1.4.min.js"></script>
         <script>
-            
+            var parking = false;
+            var login = true;
+            $("#exit-park").hide();
+            $(".opened").hide();
+            $("#logout-btn").hide();
+            var interval = setInterval(refresh, 5000);
+            var complete = 0;
+            function refresh(argument) {
+                complete = 1;
+                //TODO Get status
+                //TODO $.get("http://exceed.cupco.de/iot/1/ClickHere",onLoaded);
+                if (complete) {
+                    $("#status").html(parked);
+                    showLogout();
+                }
+            }
+            function showLogout(){
+                $("#logout-btn").fadeIn();
+            }
+            function openGate(){
+                $("#open-btn").fadeOut();
+                $("#status").html("<h2>Opened</h2>");
+            }
+            function parked() {
+                $("#status").html("<h2>Parked</h2>");
+            }
+            function goToTopPage(argument) {
+                //TODO show top page component
+            }
+            function exit(){
+                parking = false;
+                $("#exit-park").fadeOut();
+            }
+            function toMainMenu(){
+                login = false;
+                $("#exit-park").fadeOut();
+            }
+            $("#exit-butt").click(exit)
+            $("#logout").click(toMainMenu);
+            $("#open-btn").click(openGate);
         </script>
     </body>
 </html>

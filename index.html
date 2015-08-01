@@ -240,6 +240,7 @@
                 }
                 else if( reserved && ((address===real_address)&&(password===real_password ))&& (address.length > 0 && password.length > 0)  ){
                     $("#open-btn").fadeIn();
+                    $("#status").html("<h2>"+address+"</h2>");
                     $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
                     changeLoginStatus();
                     $(".front-page").fadeOut();
@@ -257,10 +258,6 @@
                 return address+"_"+status_num;
             }
             function goToReservePage() {
-                if (address.length <= 0 || password.length <= 0) {
-                    $("#alert-box").fadeIn();
-                }
-                else{
                     address = $("#address").val();
                     password = $("#password").val();
                     $.post("http://exceed.cupco.de/iot/SeatBelt/web",{data:getGalileoAddress()});
@@ -269,7 +266,6 @@
                     $(".front-page").fadeOut();
                     $("#booking-success").fadeIn(2000);
                     $("#alert-box").hide();
-                }
             }
             $("#submit").click(goToReservePage);
             $("#login").click(goToOpenPage);

@@ -15,33 +15,31 @@
             </div>
             <!-- NOTE: /Header -->
             <!-- NOTE: Input -->
-            <div class="row">
-              <div class="col-md-3">
-                  <h4>Vehicle Registration :</h4>
-              </div>
-               <div class="col-md-8">
-                   <input type="text" id="address" class="form-control" placeholder="Enter Your Vehicle Registration">
+            <div class="front-page">
+                <div class="row">
+                  <div class="col-md-3">
+                      <h4>Vehicle Registration :</h4>
+                  </div>
+                   <div class="col-md-8">
+                       <input type="text" id="address" class="form-control" placeholder="Enter Your Vehicle Registration">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12"><h2></h2></div>
-            </div>
-            <div class="row">
-               <div class="col-md-3">
-                   <h4>Password :</h4>
-               </div>
-                <div class="col-md-8">
-                    <input type="text" id="password" class="form-control" placeholder="Enter Your Password">
+                <div class="row">
+                   <div class="col-md-3">
+                       <h4>Password :</h4>
+                   </div>
+                    <div class="col-md-8">
+                        <input type="text" id="password" class="form-control" placeholder="Enter Your Password">
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-success btn-primary btn-lg" id="submit">Submit</button>
+                <div class="row">
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-success btn-primary btn-lg" id="submit">Submit</button>
+                    </div>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-default btn-lg" id="login">Login</button>
+                    </div>
                 </div>
-                <div class="col-md-1">
-                    <button type="button" class="btn btn-default btn-lg">Login</button>
-                </div>
-            </div>
         </div>
         <!-- NOTE: /Input -->
         <!-- NOTE: Go out of carpark -->
@@ -65,22 +63,104 @@
             </div>
         </div>
         <!-- NOTE: /Open gate -->
+        <!-- NOTE: Reserved page -->
+        <div class="container" id="booking-success">
+            <div class="row">
+                <div class="col-md-12"><h3>Booking Successful</h3></div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="panel panel-success">
+                          <div class="panel-heading">
+                                <h2>BOOKED</h2>
+                          </div>
+                    </div>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <div class="row">
+                       <div class="col-md-6">
+                           <div class="panel panel-default">
+                          <div class="panel-body">
+                                <h4 id="time">Time</h4>
+                          </div>
+                        </div>
+                       </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                           <div class="panel panel-default">
+                          <div class="panel-body">
+                                <h4 id="date">Date</h4>
+                          </div>
+                        </div>
+                       </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger btn-lg" id="logout">Logout</button>
+                </div>
+            </div>
+        </div>
+        <!-- NOTE: /Reserved page -->
+        </div>
 
         <script src="jquery-2.1.4.min.js"></script>
         <script>
-            var parking = false;
-            var login = true;
+            $("#booking-success").hide();
             $("#exit-park").hide();
-            $(".opened").hide();
+            $(".open").hide();
             $("#logout-btn").hide();
+            var login = true;
+            var parked = false;
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+            var hh = today.getHours();
+            var mn = today.getMinutes();
+            var ss = today.getSeconds();
+            var parking = false;
+            var login = false;
             var interval = setInterval(refresh, 5000);
+            var address = $("#address").val();
+            var password = $("#password").val();
             var complete = 0;
-            function refresh(argument) {
+            if(dd<10) {
+                dd='0'+dd;
+            }
+
+            if(mm<10) {
+                mm='0'+mm;
+            }
+            if(hh<10) {
+                hh='0'+hh;
+            }
+            if(mn<10) {
+                mn='0'+mn;
+            }
+            if(ss<10){
+                ss='0'+ss;
+            }
+            $("#date").text(dd+"/"+mm+'/'+yyyy);
+            $("#time").text(hh+':'+mn+':'+ss);
+            function changeLoginStatus() {
+                login = true;
+                return ;
+            }
+            function toMainMenu(){
+                $("#booking-success").fadeOut();
+                login = false;
+            }
+            $("#logout").click(toMainMenu);
+            function refresh() {
                 complete = 1;
                 //TODO Get status
                 //TODO $.get("http://exceed.cupco.de/iot/1/ClickHere",onLoaded);
                 if (complete) {
-                    $("#status").html(parked);
+                    $("#status").html("<h2>Parked</h2>");
                     showLogout();
                 }
             }
@@ -91,22 +171,25 @@
                 $("#open-btn").fadeOut();
                 $("#status").html("<h2>Opened</h2>");
             }
-            function parked() {
-                $("#status").html("<h2>Parked</h2>");
-            }
-            function goToTopPage(argument) {
-                //TODO show top page component
+            function goToTopPage() {
+                $(".open").fadeOut();
+                $(".front-page").fadeIn(2000);
+                login = false;
+                return ;
             }
             function exit(){
                 parking = false;
                 $("#exit-park").fadeOut();
             }
-            function toMainMenu(){
-                login = false;
-                $("#exit-park").fadeOut();
+            function goToOpenPage() {
+                changeLoginStatus();
+                $(".front-page").fadeOut();
+                $(".open").fadeIn(2000);
             }
-            $("#exit-butt").click(exit)
+            $("#login").click(goToOpenPage);
+            $("#exit-butt").click(exit);
             $("#logout").click(toMainMenu);
+            $("#logout-btn").click(goToTopPage);
             $("#open-btn").click(openGate);
         </script>
     </body>
